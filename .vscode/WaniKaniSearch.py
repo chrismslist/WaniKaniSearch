@@ -1,7 +1,7 @@
 # intialize WaniKani API
 from wanikani_api.client import Client
 
-#Import Librarie
+#Import Libraries
 from colored import fg, bg, attr #Import Colored Library
 import os #Import OS Library
 import sys #Import SYS Library
