@@ -28,12 +28,18 @@ except:
     print("%sIncorrect Wanikani API Key! Program Terminated!%s" % (fg(1), attr(0)))
     sys.exit()
 
+#Simplify Variables
+userName = user_information.username
+userLevel = user_information.level 
+userProfile = user_information.profile_url
+userStarted = user_information.started_at
+
 #Print User Infromation from API Personal Profile
 print("%sUser Information: \nUsername: %s" % (fg(1), attr(0))+
-    user_information.username+"\n%sLevel:%s "  % (fg(2), attr(0))+
-    str(user_information.level)+"\n%sProfile Url:%s " % (fg(3), attr(0))+
-    user_information.profile_url+"\n%sStart Date:%s " % (fg(4), attr(0))+
-    str(user_information.started_at)) 
+    userName+"\n%sLevel:%s "  % (fg(2), attr(0))+
+    str(userLevel)+"\n%sProfile Url:%s " % (fg(3), attr(0))+
+    userProfile+"\n%sStart Date:%s " % (fg(4), attr(0))+
+    str(userStarted)) 
 
 def loadDatabase(): #Get and Save All WaniKani Data from API
     
@@ -202,13 +208,19 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
                     print(vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
 
     if action=="list current vocab": 
+        subjects = client.subjects(type="kanji", level = userLevel)
+        for subject in subjects:
+            print(subject)
+        
+        """
         assignments = client.assignments(subject_types="vocabulary")
         print("Total Vocab:"+str(len((assignments))))
         print("SRS Level, Reading, Word (English)")
         for assignment in assignments:
-            try: print(assignment.srs_stage, assignment.subject.readings.reading[0], assignment.subject.meanings[0].meaning)
-            except: print('Type Error')
-    
+            print(assignment.srs_stage, assignment.subject.readings.reading[0], assignment.subject.meanings[0].meaning)
+            #except: print('Type Error')
+    """
+
     if action=="list current kanji": 
         assignments = client.assignments(subject_types="kanji")
         #print("Total Kanji:"+str(len((assignments))))
