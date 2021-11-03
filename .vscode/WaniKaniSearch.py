@@ -209,33 +209,31 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
 
     if action=="list current vocab": 
         subjects = client.subjects(types=["vocabulary"], levels=userLevel)
+        print("--Reading, Meaning--")
         for subject in subjects:
-            print(subject.meanings[0].meaning)
+            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
         
+        """
         assignments = client.assignments(subject_types="vocabulary")
         print("Total Vocab:"+str(len((assignments))))
         print("SRS Level, Reading, Word (English)")
         for assignment in assignments:
-            print(assignment.srs_stage,  assignment.subject.readings[0].reading, assignment.subject.meanings[0].meaning)
+            try: print(assignment.srs_stage,  assignment.subject.readings[0].reading, assignment.subject.meanings[0].meaning)
             except: print('Unknown // Type Error')
-
+        """
 
     if action=="list current kanji": 
-        assignments = client.assignments(subject_types="kanji")
-        #print("Total Kanji:"+str(len((assignments))))
-        print("SRS Level, Reading, Word (English)")
-        for kanji in assignments:
-            print(kanji)
-            try: print(kanji.srs_stage, kanji.subject.readings.reading[0], kanji.subject.meanings[0].meaning)
-            except: print('Type Error')
+        subjects = client.subjects(types=["kanji"], levels=userLevel)
+        print("--Reading, Meaning--")
+        for subject in subjects:
+            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+        
 
     if action=="list current radicals": 
-        assignments = client.assignments(subject_types="radicals")
-        #print("Total Radicals:"+str(len((assignments))))
-        print("SRS Level, Reading, Word (English)")
-        for assignment in assignments:
-            try: print(assignment.srs_stage, assignment.subject.readings.reading[0], assignment.subject.meanings[0].meaning)
-            except: print('Type Error')
+        subjects = client.subjects(types=["radical"], levels=userLevel)
+        print("--Reading, Meaning--")
+        for subject in subjects:
+            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
         
     mainLoop() #Go Back to Top of Function
 
