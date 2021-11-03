@@ -208,18 +208,17 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
                     print(vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
 
     if action=="list current vocab": 
-        subjects = client.subjects(type="kanji", level = userLevel)
+        subjects = client.subjects(types=["vocabulary"], levels=userLevel)
         for subject in subjects:
-            print(subject)
+            print(subject.meanings[0].meaning)
         
-        """
         assignments = client.assignments(subject_types="vocabulary")
         print("Total Vocab:"+str(len((assignments))))
         print("SRS Level, Reading, Word (English)")
         for assignment in assignments:
-            print(assignment.srs_stage, assignment.subject.readings.reading[0], assignment.subject.meanings[0].meaning)
-            #except: print('Type Error')
-    """
+            print(assignment.srs_stage,  assignment.subject.readings[0].reading, assignment.subject.meanings[0].meaning)
+            except: print('Unknown // Type Error')
+
 
     if action=="list current kanji": 
         assignments = client.assignments(subject_types="kanji")
