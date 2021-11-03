@@ -1,2 +1,2 @@
-# WaniKaniSearch
-Search Application using WaniKani API, Among other Included API's
+# WaniKani Related Applications
+A Collection of WaniKani Python Applications written for Fun using Various External API's.
