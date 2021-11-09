@@ -25,7 +25,7 @@ client = Client(v2_api_key)
 try:
     user_information = client.user_information()
 except:
-    print("%sIncorrect Wanikani API Key! Program Terminated!%s" % (fg(1), attr(0)))
+    print("%sUnable to Connect / Incorrect Wanikani API Key! Program Terminated!%s" % (fg(1), attr(0)))
     sys.exit()
 
 #Simplify Variables
@@ -185,11 +185,13 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
 
     action = input("Type an Action: ")
     
+    #List all Vocab from Database
     if action =="list":
         for vocab in vocabulary:
             for vocab in vocabulary:
                 print(vocab)
 
+    #Search for Meaning in Hiragana
     if action =="search for meaning":
         search_word = input("Enter Reading in Romaji: ")
         searchKana = jaconv.alphabet2kana(search_word)
@@ -199,6 +201,7 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
             if searchKana in vocab.readings[0].reading:
                 print(vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
 
+    #Search for Reading in English
     if action =="search for reading":
             print("Warning: Case Sensitive")
             search_word = input("Enter Meaning in English: ")
@@ -207,11 +210,14 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
                 if search_word in vocab.meanings[0].meaning:
                     print(vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
 
+    #List Current Vocab for User's Level
     if action=="list current vocab": 
         subjects = client.subjects(types=["vocabulary"], levels=userLevel)
-        print("--Reading, Meaning--")
+        print("")
+        print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
         for subject in subjects:
-            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            try: print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            except: print('Unknown // Type Error')
         
         """
         assignments = client.assignments(subject_types="vocabulary")
@@ -222,18 +228,22 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
             except: print('Unknown // Type Error')
         """
 
+    #List Current Kanji for User's Level
     if action=="list current kanji": 
         subjects = client.subjects(types=["kanji"], levels=userLevel)
-        print("--Reading, Meaning--")
+        print("")
+        print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
         for subject in subjects:
             print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
-        
-
+    
+    #List Current Radicals for User's Level
     if action=="list current radicals": 
         subjects = client.subjects(types=["radical"], levels=userLevel)
-        print("--Reading, Meaning--")
+        print("")
+        print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
         for subject in subjects:
-            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            try: print(subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            except: print('Unknown // Type Error')
         
     mainLoop() #Go Back to Top of Function
 
