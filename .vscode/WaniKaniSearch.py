@@ -232,9 +232,9 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
     if action=="list current kanji": 
         subjects = client.subjects(types=["kanji"], levels=userLevel)
         print("")
-        print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
+        print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
         for subject in subjects:
-            print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            print(subject.characters+"%s: %s"% (fg(3), attr(0))+subject.readings[0].reading+", "+subject.meanings[0].meaning)
     
     #List Current Radicals for User's Level
     if action=="list current radicals": 
@@ -247,5 +247,5 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         
     mainLoop() #Go Back to Top of Function
 
-#loadDatabase() #Load Latest WaniKani Data
+loadDatabase() #Load Latest WaniKani Data
 mainLoop() #Run main program loop
