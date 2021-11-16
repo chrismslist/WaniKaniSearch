@@ -64,6 +64,7 @@ def loadDatabase(): #Get and Save All WaniKani Data from API
     print("Total Vocabulary: "+str(len(vocabulary)))
     print("Total Radicals: "+str(len(radicals)))
     print("Total Kanji: "+str(len(kanji)))
+    print(" ")
 
     #save()
     
@@ -185,38 +186,47 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
 
     action = input("Type an Action: ")
     
+    count=0
     #List all Vocab from Database
-    if action =="list":
-        for vocab in vocabulary:
-            for vocab in vocabulary:
-                print(vocab)
+    if "list vocab" in action:
+        s = []
+        [int(s) for s in action.split() if s.isdigit()]
+        for vocab in range(s[0],s[1]):
+            count+=1
+            print(str(count)+". "+vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
 
     #Search for Meaning in Hiragana
-    if action =="search for meaning":
+    if action =="search for vocab meaning":
         search_word = input("Enter Reading in Romaji: ")
         searchKana = jaconv.alphabet2kana(search_word)
         print("%s--Search Results--%s" % (fg(1), attr(0)))
+        count=0
         for vocab in vocabulary:
             #print(vocab.readings[0].reading)
             if searchKana in vocab.readings[0].reading:
-                print(vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
+                count+=1
+                print(str(count)+". "+vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
 
     #Search for Reading in English
-    if action =="search for reading":
+    if action =="search for vocab reading":
             print("Warning: Case Sensitive")
             search_word = input("Enter Meaning in English: ")
             print("%s--Search Results--%s" % (fg(1), attr(0)))
+            count=0
             for vocab in vocabulary:
                 if search_word in vocab.meanings[0].meaning:
-                    print(vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
+                    count+=1
+                    print(str(count)+". "+vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
 
     #List Current Vocab for User's Level
     if action=="list current vocab": 
         subjects = client.subjects(types=["vocabulary"], levels=userLevel)
         print("")
         print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
+        count = 0
         for subject in subjects:
-            try: print(subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            count+=1
+            try: print(str(count)+". "+subject.readings[0].reading+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
             except: print('Unknown // Type Error')
         
         """
@@ -233,16 +243,20 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         subjects = client.subjects(types=["kanji"], levels=userLevel)
         print("")
         print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
+        count = 0
         for subject in subjects:
-            print(subject.characters+"%s: %s"% (fg(3), attr(0))+subject.readings[0].reading+", "+subject.meanings[0].meaning)
+            count+=1
+            print(str(count)+". "+subject.characters+"%s: %s"% (fg(3), attr(0))+subject.readings[0].reading+", "+subject.meanings[0].meaning)
     
     #List Current Radicals for User's Level
     if action=="list current radicals": 
         subjects = client.subjects(types=["radical"], levels=userLevel)
         print("")
         print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
+        count = 0
         for subject in subjects:
-            try: print(subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
+            count+=1
+            try: print(str(count)+". "+subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
             except: print('Unknown // Type Error')
         
     mainLoop() #Go Back to Top of Function
