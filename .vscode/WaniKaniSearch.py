@@ -18,6 +18,8 @@ v2_api_key = "be14ad6f-4754-4f0c-bf13-9dea954af506" # You can get it here: https
 client = Client(v2_api_key)
 
 #Set global variables
+global listedPrevious
+
 #use dict value to store variables?
 
 
@@ -147,7 +149,7 @@ def rewrite(): #rewrite files when new information is added
     return
 '''
 
-'''
+"""
 def save(): #write all WaniKani Data and numbers to local file
 
     file_vocabulary.close()
@@ -180,7 +182,7 @@ def save(): #write all WaniKani Data and numbers to local file
     load()#reloads all variables in local file
 
     mainLoop()#returns to start of program state
-'''
+"""
 
 def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
 
@@ -270,15 +272,20 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
             count+=1
             try: print(str(count)+". "+subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
             except: print('Unknown // Type Error')
+            global listedPrevious
+            listedPrevious = {}
+            
+            dicts[keys[i]] = values[i]
 
     #Get more information based on Number from List User Selects
     if action=="select":
         num = []
         try: num = [int(s) for s in action.split() if s.isdigit()]
         except IndexError: num[0] = -1
+        print(listedPrevious)
     
     
     mainLoop() #Go Back to Top of Function
 
-loadDatabase() #Load Latest WaniKani Data
+#loadDatabase() #Load Latest WaniKani Data
 mainLoop() #Run main program loop
