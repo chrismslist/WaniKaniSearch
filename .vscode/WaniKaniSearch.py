@@ -7,6 +7,7 @@ import os #Import OS Library
 import sys #Import SYS Library
 import jaconv
 from wanikani_api.models import Assignment #import Japanese Conversion tool
+import csv #import module to use cfv files
 
 #Clear Console
 os.system('cls')
@@ -43,6 +44,7 @@ print("%sUser Information: \nUsername: %s" % (fg(1), attr(0))+
     userProfile+"\n%sStart Date:%s " % (fg(4), attr(0))+
     str(userStarted)) 
 
+
 def loadDatabase(): #Get and Save All WaniKani Data from API
     
     #Load Local Database and check if avaliable
@@ -69,7 +71,7 @@ def loadDatabase(): #Get and Save All WaniKani Data from API
     print(" ")
 
     #save()
-    
+
 
 '''
 def load(): #load and create file to memory
@@ -149,11 +151,11 @@ def rewrite(): #rewrite files when new information is added
     return
 '''
 
-"""
+'''
 def save(): #write all WaniKani Data and numbers to local file
 
-    file_vocabulary.close()
-    file_kanji.close()
+    file_vocabulary_readings.close()
+    file_kanji_readings.close()
     file_radicals.close()
 
     os.remove("vocabulary.txt")
@@ -163,7 +165,7 @@ def save(): #write all WaniKani Data and numbers to local file
     rewrite()
 
     saved_radicals=radicals
-    #saved_kanji=kanji
+    saved_kanji=kanji
     saved_vocabulary=vocabulary
 
 
@@ -182,7 +184,7 @@ def save(): #write all WaniKani Data and numbers to local file
     load()#reloads all variables in local file
 
     mainLoop()#returns to start of program state
-"""
+'''
 
 def printMoreInfo(searchTerm, type):
     if type == 'radical':
@@ -199,9 +201,10 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
     global listedPrevious
     global previousCommand
     
-    
+    #Prompt user for Action
     action = input("Type an Action: ")
     
+    #Reset / Define Count Variables
     count=0
     num = []
     #List all Vocab from Database
@@ -209,12 +212,14 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         try: num = [int(s) for s in action.split() if s.isdigit()]
         except IndexError: num[0] = -1
         
+        #If length of list from input is zero, means no numbers have been entered, so set vals to zero to avoid error
         if len(num)==0:
             num = [0,0]
             num[0] = 1000000000
         
         print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
         
+        #Print vocab for loop, prints all vocab unless number specified
         for vocab in vocabulary:
             count+=1
             print(str(count)+". "+vocab.characters+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading+", "+vocab.meanings[0].meaning)
