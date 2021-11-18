@@ -185,7 +185,7 @@ def save(): #write all WaniKani Data and numbers to local file
 
     mainLoop()#returns to start of program state
 '''
-
+#Function to print more info on a term, takes parameters for the search term, and the type of term (radical, vocabulary, kanji)
 def printMoreInfo(searchTerm, type):
     if type == 'radical':
         subjects = client.subjects(types=["radical"], levels=userLevel)
@@ -228,8 +228,13 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
 
     #Search for Meaning in Hiragana
     if action =="search for vocab meaning":
+        
+        #Prompt for input reading in romaji
         search_word = input("Enter Reading in Romaji: ")
+        
+        #Convert alphabet to kana using api
         searchKana = jaconv.alphabet2kana(search_word)
+
         print("%s--Search Results--%s" % (fg(1), attr(0)))
         print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
         count=0
