@@ -187,36 +187,48 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
     action = input("Type an Action: ")
     
     count=0
+    num = []
     #List all Vocab from Database
     if "list vocab" in action:
-        s = []
-        [int(s) for s in action.split() if s.isdigit()]
-        for vocab in range(s[0],s[1]):
+        try: num = [int(s) for s in action.split() if s.isdigit()]
+        except IndexError: num[0] = -1
+        
+        if len(num)==0:
+            num = [0,0]
+            num[0] = 1000000000
+        
+        print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
+        
+        for vocab in vocabulary:
             count+=1
-            print(str(count)+". "+vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
+            print(str(count)+". "+vocab.characters+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading+", "+vocab.meanings[0].meaning)
+            if count>=num[0]:
+                break
 
     #Search for Meaning in Hiragana
     if action =="search for vocab meaning":
         search_word = input("Enter Reading in Romaji: ")
         searchKana = jaconv.alphabet2kana(search_word)
         print("%s--Search Results--%s" % (fg(1), attr(0)))
+        print("%s--Kanji: Reading, Meaning--%s" % (fg(1), attr(0)))
         count=0
         for vocab in vocabulary:
             #print(vocab.readings[0].reading)
             if searchKana in vocab.readings[0].reading:
                 count+=1
-                print(str(count)+". "+vocab.readings[0].reading+"%s: %s"% (fg(3), attr(0))+vocab.meanings[0].meaning)
+                print(str(count)+". "+vocab.characters+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading+", "+vocab.meanings[0].meaning)
 
     #Search for Reading in English
     if action =="search for vocab reading":
             print("Warning: Case Sensitive")
             search_word = input("Enter Meaning in English: ")
             print("%s--Search Results--%s" % (fg(1), attr(0)))
+            print("%s--Meaning: Reading, Kanji--%s" % (fg(1), attr(0)))
             count=0
             for vocab in vocabulary:
                 if search_word in vocab.meanings[0].meaning:
                     count+=1
-                    print(str(count)+". "+vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading )
+                    print(str(count)+". "+vocab.meanings[0].meaning+"%s: %s"% (fg(3), attr(0))+vocab.readings[0].reading+", "+vocab.characters)
 
     #List Current Vocab for User's Level
     if action=="list current vocab": 
@@ -258,7 +270,14 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
             count+=1
             try: print(str(count)+". "+subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
             except: print('Unknown // Type Error')
-        
+
+    #Get more information based on Number from List User Selects
+    if action=="select":
+        num = []
+        try: num = [int(s) for s in action.split() if s.isdigit()]
+        except IndexError: num[0] = -1
+    
+    
     mainLoop() #Go Back to Top of Function
 
 loadDatabase() #Load Latest WaniKani Data
