@@ -5,9 +5,10 @@ from wanikani_api.client import Client
 from colored import fg, bg, attr #Import Colored Library
 import os #Import OS Library
 import sys #Import SYS Library
-import jaconv
+import jaconv #Import US to Kana converter Library
 from wanikani_api.models import Assignment #import Japanese Conversion tool
-import csv #import module to use cfv files
+import json #import json Library
+
 
 #Clear Console
 os.system('cls')
@@ -48,7 +49,8 @@ print("%sUser Information: \nUsername: %s" % (fg(1), attr(0))+
 def loadDatabase(): #Get and Save All WaniKani Data from API
     
     #Load Local Database and check if avaliable
-    #load()
+    
+    load()
 
     global vocabulary
     global radicals
@@ -70,10 +72,11 @@ def loadDatabase(): #Get and Save All WaniKani Data from API
     print("Total Kanji: "+str(len(kanji)))
     print(" ")
 
-    #save()
+    save()
+    
 
 
-'''
+
 def load(): #load and create file to memory
     try:
         os.chdir("C:\\WaniKaniData")
@@ -92,90 +95,66 @@ def load(): #load and create file to memory
 
     global files
 
-    try:
-        file_vocabulary = open("vocabulary.txt","r+")
-    except FileNotFoundError:
-        file_vocabulary = open("vocabulary.txt","w+")
-        print("Sys: Vocabulary File Missing: ReWritten")
-        load()
-    try:
-        file_radicals = open("radicals.txt","r+")
-    except FileNotFoundError:
-        file_radicals = open("radicals.txt","w+")
-        print("Sys: Radical File Missing: ReWritten")
-        load()
-
-    try:
-        file_kanji = open("kanji.txt","r+")
-    except FileNotFoundError:
-        file_kanji = open("kanji.txt","w+")
-        print("Sys: Kanji File Missing: ReWritten")
-        load()
-
     files = os.listdir()
-
-    saved_vocabulary = file_vocabulary.read().splitlines()
-    saved_kanji = file_kanji.read().splitlines()
-    saved_radicals = file_radicals.read().splitlines()
-
-    #team_combined = [[team_nums],[team_names]]
-
+    
     return
-'''
 
-'''
 def rewrite(): #rewrite files when new information is added
 
 
-    #global file_vocabulary
-    #global file_kanji
-    #global file_radicals
+    global file_vocabulary
+    global file_kanji
+    global file_radicals
 
 
     try:
-        file_vocabulary = open("vocabulary.txt","r+")
+        file_vocabulary = open("vocabulary.csv","r+")
     except FileNotFoundError:
-        file_vocabulary = open("vocabulary.txt","w+")
+        file_vocabulary = open("vocabulary.csv","w+")
         rewrite()
     try:
-        file_radicals = open("radicals.txt","r+")
+        file_radicals = open("radicals.csv","r+")
     except FileNotFoundError:
-        file_radicals = open("radicals.txt","w+")
+        file_radicals = open("radicals.csv","w+")
         rewrite()
     try:
-        file_kanji = open("kanji.txt","r+")
+        file_kanji = open("kanji.csv","r+")
     except FileNotFoundError:
-        file_kanji = open("kanji.txt","w+")
+        file_kanji = open("kanji.csv","w+")
         rewrite()
 
     return
-'''
 
-'''
+
+
 def save(): #write all WaniKani Data and numbers to local file
-
-    file_vocabulary_readings.close()
-    file_kanji_readings.close()
-    file_radicals.close()
-
-    os.remove("vocabulary.txt")
-    os.remove("radicals.txt")
-    os.remove("kanji.txt")
-
-    rewrite()
 
     saved_radicals=radicals
     saved_kanji=kanji
     saved_vocabulary=vocabulary
 
 
-    for vocab in saved_vocabulary:
-        file_vocabulary.write("%s\n" % vocab)
-    for kanji in saved_kanji:
-        file_kanji.write("%s\n" % kanji)
-    for radical in saved_radicals:
-        file_radicals.write("%s\n" % radical)
+    for item in radicals:
+            saved_radicals.update({item.characters: item.meanings[0].meaning})
 
+    # create json object from dictionary
+    json = json.dumps(saved_radicals)
+
+    # open file for writing, "w" 
+    f = open("radicals.json","w")
+
+    # write json object to file
+    f.write(json)
+
+    # close file
+    f.close()
+
+    rewrite()
+
+    
+
+    #file_kanji.writerow([radicals.subject, val])
+    #file_radicals.writerow([key, val])
 
     file_vocabulary.close()
     file_kanji.close()
@@ -184,7 +163,7 @@ def save(): #write all WaniKani Data and numbers to local file
     load()#reloads all variables in local file
 
     mainLoop()#returns to start of program state
-'''
+
 #Function to print more info on a term, takes parameters for the search term, and the type of term (radical, vocabulary, kanji)
 def printMoreInfo(searchTerm, type):
     if type == 'radical':
@@ -314,5 +293,5 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         previousCommand = action
     mainLoop() #Go Back to Top of Function
 
-#loadDatabase() #Load Latest WaniKani Data
+loadDatabase() #Load Latest WaniKani Data
 mainLoop() #Run main program loop
