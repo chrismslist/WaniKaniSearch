@@ -108,19 +108,19 @@ def rewrite(): #rewrite files when new information is added
 
 
     try:
-        file_vocabulary = open("vocabulary.csv","r+")
+        file_vocabulary = open("vocabulary.json","r+")
     except FileNotFoundError:
-        file_vocabulary = open("vocabulary.csv","w+")
+        file_vocabulary = open("vocabulary.json","w+")
         rewrite()
     try:
-        file_radicals = open("radicals.csv","r+")
+        file_radicals = open("radicals.json","r+")
     except FileNotFoundError:
-        file_radicals = open("radicals.csv","w+")
+        file_radicals = open("radicals.json","w+")
         rewrite()
     try:
-        file_kanji = open("kanji.csv","r+")
+        file_kanji = open("kanji.json","r+")
     except FileNotFoundError:
-        file_kanji = open("kanji.csv","w+")
+        file_kanji = open("kanji.json","w+")
         rewrite()
 
     return
@@ -129,7 +129,7 @@ def rewrite(): #rewrite files when new information is added
 
 def save(): #write all WaniKani Data and numbers to local file
 
-    saved_radicals=radicals
+    saved_radicals={}
     saved_kanji=kanji
     saved_vocabulary=vocabulary
 
