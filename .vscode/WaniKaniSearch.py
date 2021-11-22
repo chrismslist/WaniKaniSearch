@@ -20,7 +20,8 @@ v2_api_key = "be14ad6f-4754-4f0c-bf13-9dea954af506" # You can get it here: https
 client = Client(v2_api_key)
 
 #Set global variables
-previousCommand = ""
+previousCommand = []
+iteration = 0
 
 #use dict value to store variables?
 
@@ -50,7 +51,7 @@ def loadDatabase(): #Get and Save All WaniKani Data from API
     
     #Load Local Database and check if avaliable
     
-    load()
+    #load()
 
     global vocabulary
     global radicals
@@ -72,11 +73,11 @@ def loadDatabase(): #Get and Save All WaniKani Data from API
     print("Total Kanji: "+str(len(kanji)))
     print(" ")
 
-    save()
+    #save()
     
 
 
-
+"""
 def load(): #load and create file to memory
     try:
         os.chdir("C:\\WaniKaniData")
@@ -125,8 +126,6 @@ def rewrite(): #rewrite files when new information is added
 
     return
 
-
-
 def save(): #write all WaniKani Data and numbers to local file
 
     saved_radicals={}
@@ -162,23 +161,26 @@ def save(): #write all WaniKani Data and numbers to local file
 
     load()#reloads all variables in local file
 
+
     mainLoop()#returns to start of program state
+"""
 
 #Function to print more info on a term, takes parameters for the search term, and the type of term (radical, vocabulary, kanji)
 def printMoreInfo(searchTerm, type):
     if type == 'radical':
         subjects = client.subjects(types=["radical"], levels=userLevel)
         print("")
-        print("%s--Reading, Meaning--%s" % (fg(1), attr(0)))
-        for subject in subjects:
-            try: print(subject.characters+"%s: %s"% (fg(3), attr(0))+subject.meanings[0].meaning)
-            except: print('Unknown // Type Error')
+        print("%s--More Information--%s" % (fg(1), attr(0)))
         
 
 def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
     #Def Global Vars in the Function
     global listedPrevious
     global previousCommand
+    global iteration
+    
+    if iteration==2:
+        previousCommand=[]
     
     #Prompt user for Action
     action = input("Type an Action: ")
@@ -287,10 +289,13 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         print(listedPrevious)
         
         selected = listedPrevious[num[0]]
-        if 'radical' in previousCommand:
+        if 'radical' in previousCommand[0]:
             printMoreInfo(selected, "radical")
+            
+    previousCommand.append(action)
+    iteration+=1
     
-        previousCommand = action
+       
     mainLoop() #Go Back to Top of Function
 
 loadDatabase() #Load Latest WaniKani Data
