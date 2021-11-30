@@ -128,7 +128,7 @@ def rewrite(): #rewrite files when new information is added
 
 
 def save(): #write all WaniKani Data and numbers to local file
-
+    
     saved_radicals={}
     saved_kanji=kanji
     saved_vocabulary=vocabulary
