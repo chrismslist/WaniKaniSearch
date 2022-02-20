@@ -1,4 +1,5 @@
 # intialize WaniKani API
+from re import search
 from wanikani_api.client import Client
 
 #Import Libraries
@@ -171,6 +172,11 @@ def printMoreInfo(searchTerm, type):
         subjects = client.subjects(types=["radical"], levels=userLevel)
         print("")
         print("%s--More Information--%s" % (fg(1), attr(0)))
+        print('Selected Radical: '+searchTerm)
+        print('Name: ')
+        print(subjects.meanings[0].meaning)
+    else:
+        return
         
 
 def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
@@ -183,7 +189,7 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
         previousCommand=[]
     
     #Prompt user for Action
-    action = input("Type an Action: ")
+    action = input("%sType an Action: %s" % (fg(2), attr(0)))
     
     #Reset / Define Count Variables
     count=0
@@ -281,16 +287,22 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
             listedPrevious.update({count: subject.characters})
 
     #Get more information based on Number from List User Selects
+    #Keep at bottom of actions this applies to
     if "select" in action:
         num = []
         try: num = [int(s) for s in action.split() if s.isdigit()]
         except IndexError: num[0] = 1
         
+        print(num)
         print(listedPrevious)
         
         selected = listedPrevious[num[0]]
         if 'radical' in previousCommand[0]:
             printMoreInfo(selected, "radical")
+            
+    if action =='help':
+        print('Help')
+            
             
     previousCommand.append(action)
     iteration+=1
@@ -298,5 +310,5 @@ def mainLoop(): #Main Loop of the Program, Where User Performs Specified Actions
        
     mainLoop() #Go Back to Top of Function
 
-loadDatabase() #Load Latest WaniKani Data
+#loadDatabase() #Load Latest WaniKani Data
 mainLoop() #Run main program loop
